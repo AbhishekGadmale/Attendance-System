@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Record</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    {% if not user_data.empty %}
+        <h1>{{ user_data.iloc[0]['Name'] }}'s Attendance</h1>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Roll</th>
+                <th>Time</th>
+                <th>Date</th>
+                <th>Class</th>
+            </tr>
+            {% for index, row in user_data.iterrows() %}
+            <tr>
+                <td>{{ row['Name'] }}</td>
+                <td>{{ row['Roll'] }}</td>
+                <td>{{ row['Time'] }}</td>
+                <td>{{ row['Date'] }}</td>
+                <td>{{ row['Class'] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <h2>No Attendance Records Found.</h2>
+    {% endif %}
+
+    <a href="/"><button>Back to Home</button></a>
+
+</body>
+</html>

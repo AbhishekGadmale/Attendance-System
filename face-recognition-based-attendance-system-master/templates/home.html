@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Face Recognition Attendance System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        h1, h2, h3 {
+            color: #333;
+            text-align: center;
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        form {
+            margin: 20px auto;
+            width: 60%;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input[type="text"], select {
+            width: 100%;
+            padding: 8px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .delete-btn {
+            background-color: #f44336;
+        }
+        .delete-btn:hover {
+            background-color: #e63628;
+        }
+        .clear-btn {
+            background-color: #f57c00;
+        }
+        .clear-btn:hover {
+            background-color: #e66a00;
+        }
+    </style>
+</head>
+<body>
+    <h1>Face Recognition Attendance System</h1>
+    <h2>Total Registered Users: {{ totalreg }}</h2>
+
+    <!-- Display Attendance Records -->
+    <h3>Attendance Records</h3>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Roll</th>
+            <th>Time</th>
+            <th>Date</th>
+            <th>Class</th>  <!-- Add Class column -->
+            <th>Actions</th>
+        </tr>
+        {% for i in range(l) %}
+        <tr>
+            <td>{{ names[i] }}</td>
+            <td>{{ rolls[i] }}</td>
+            <td>{{ times[i] }}</td>
+            <td>{{ dates[i] }}</td>
+            <td>{{ classes[i] }}</td>  <!-- Display Class -->
+            <td>
+                <a href="/record/{{ rolls[i] }}"><button>View Record</button></a>
+                <form action="/delete/{{ rolls[i] }}" method="POST" style="display:inline;">
+                    <button type="submit" class="delete-btn">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!-- Add New User Form -->
+    <form action="/add" method="POST">
+        <h3>Add New User</h3>
+        <label for="newusername">Name:</label>
+        <input type="text" id="newusername" name="newusername" required>
+
+        <label for="newuserid">Roll Number:</label>
+        <input type="text" id="newuserid" name="newuserid" required>
+
+        <label for="class_select">Class:</label>
+        <select id="class_select" name="class" required>
+            <option value="FYIT">FYIT</option>
+            <option value="SYIT">SYIT</option>
+            <option value="TYIT">TYIT</option>
+        </select>
+
+        <button type="submit">Add User</button>
+    </form>
+
+    <!-- Start Attendance Form -->
+    <form action="/start" method="GET">
+        <h3>Take Attendance</h3>
+        <label for="class_start">Select Class:</label>
+        <select id="class_start" name="class" required>
+            <option value="FYIT">FYIT</option>
+            <option value="SYIT">SYIT</option>
+            <option value="TYIT">TYIT</option>
+        </select>
+
+        <button type="submit">Start Attendance</button>
+    </form>
+
+    <!-- Filter Attendance -->
+    <form action="/filter" method="GET">
+        <label for="class_filter">Filter by Class:</label>
+        <select id="class_filter" name="class" required>
+            <option value="FYIT">FYIT</option>
+            <option value="SYIT">SYIT</option>
+            <option value="TYIT">TYIT</option>
+        </select>
+        <button type="submit">Filter</button>
+    </form>
+
+    <!-- Clear Attendance -->
+    <form action="/clear" method="POST" style="display:inline;">
+        <button type="submit" class="clear-btn">Clear Attendance</button>
+    </form>
+
+    <!-- Export Attendance -->
+    <form action="/export_class" method="GET">
+        <label for="class_export">Download Attendance for Class:</label>
+        <select id="class_export" name="class" required>
+            <option value="FYIT">FYIT</option>
+            <option value="SYIT">SYIT</option>
+            <option value="TYIT">TYIT</option>
+        </select>
+        <button type="submit">Download</button>
+    </form>
+
+    <!-- Attendance Counts -->
+    <h3>Attendance Counts by Class</h3>
+    <ul>
+        {% for class, count in attendance_counts.items() %}
+        <li>{{ class }}: {{ count }} records</li>
+        {% endfor %}
+    </ul>
+
+    <a href="/"><button>View All Classes</button></a>
+
+</body>
+</html>
